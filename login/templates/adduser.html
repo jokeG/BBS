@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>新增用户</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="../static/jquery-3.3.1.js"></script>
+    <script src="../static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <style>
+        .box {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="col-md-3 col-md-offset-3 box">
+            <h2>新增用户</h2>
+            <form method="post" action="">
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">name</label>
+                    <input type="text" class="form-control" placeholder="name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pwd">
+                </div>
+                   <div class="form-group">
+                    <label for="exampleInputEmail1">sex</label>
+                    <input type="text" class="form-control" placeholder="sex" name="sex">
+                </div>
+                   <div class="form-group">
+                    <label for="exampleInputEmail1">phone</label>
+                    <input type="text" class="form-control" placeholder="phone" name="phone">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Check me out
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

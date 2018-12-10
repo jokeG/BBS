@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #bbs {
+            height: 60px;
+            margin-top: 4px;
+            border: #9d9d9d 1px solid;
+            border-radius: 10px;
+        }
+
+        #bbs2 {
+            margin: 0;
+            padding: 0;
+            color: #9d9d9d;
+            font-size: 10px;
+        }
+
+        #master {
+            margin: 0 10px;
+        }
+
+        .article_bottom span {
+            margin-right: 5px;
+        }
+
+        #pull-right {
+            height: 40px;
+        }
+
+        #touxiang {
+            display: block;
+            width: 37px;
+            height: 37px;
+            border-radius: 50%;
+            background: url("/media/{{ request.user.avatar }}") no-repeat;
+            background-size: 37px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="master">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid" id="bbs2">
+            <div class="pull-left">代码改变世界</div>
+            <div class="pull-right " id="pull-right">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                        <li id="touxiang"><a href="/{{ request.user.username }}"></a></li>
+                        <li><a href="/{{ request.user.username }}">{{ request.user.username }}</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">修改密码</a></li>
+                                <li><a href="#">修改头像</a></li>
+                                <li><a href="http://127.0.0.1:8000/m/">后台管理</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/logout/">注销</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="/login/">登录</a></li>
+                        <li><a href="/register/">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid" id="bbs">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div>
+                <div class="navbar-header">
+                    <div><a href="https://www.cnblogs.com"><img src="/static/img/bbs_logo_.gif" alt=" " id="img"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2" style="background-color:#eeeeff">
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            网站分类
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-7">
+                {% for article in article_list %}
+                    <div>
+                        <h4>
+                            <a href="/{{ article.blog.userinfo.username }}/article/{{ article.pk }}">{{ article.title }}</a>
+                        </h4>
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object" src="/media/{{ article.blog.userinfo.avatar }}"
+                                         height="70" width="70">
+                                </a>
+                            </div>
+                            <div class="media-body">
+
+                                {{ article.desc }}
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px " class="article_bottom">
+                            <span><a
+                                    href="/{{ article.blog.userinfo.username }}">{{ article.blog.userinfo.username }}</a></span>
+                            <span>发布于 {{ article.create_time|date:'Y-m-d H:i:s' }}</span>
+                            <span><i class="glyphicon glyphicon-heart-empty" aria-hidden="true"><a
+                                    href="">评论({{ article.commit_num }})</a></i></span>
+                            <span class="glyphicon glyphicon-thumbs-up"><a href="">点赞({{ article.up_num }})</a></span>
+                        </div>
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="col-md-3" style="background-color: #eeeeff">
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item disabled">
+                            网站分类
+                        </a>
+                        <a href="#" class="list-group-item">网站分类</a>
+                        <a href="#" class="list-group-item">net技术</a>
+                        <a href="#" class="list-group-item">编程语言</a>
+                        <a href="#" class="list-group-item">软件设计</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

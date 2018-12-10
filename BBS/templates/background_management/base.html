@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <script src="../../static/jquery-3.3.1.js"></script>
+    <script src="../../static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../../static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <style>
+        #bbs {
+            border: #9d9d9d 1px solid;
+            border-radius: 10px;
+        }
+
+        #bbs2 {
+            margin: 0;
+            padding: 0;
+            color: #9d9d9d;
+            font-size: 10px;
+        }
+
+        #master {
+            margin: 0 10px;
+        }
+        #touxiang {
+            display: block;
+            width: 37px;
+            height: 37px;
+            border-radius: 50%;
+            background: url("/media/{{ request.user.avatar }}") no-repeat;
+            background-size: 37px;
+            margin-right: 20px;
+        }
+
+        #bbs2 {
+            border-radius: 10px;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
+    </style>
+</head>
+<body>
+<div id="master">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid" id="bbs2">
+            <p class="pull-left"><<<a href=""> 网站首页</a></p>
+{#            <p class="pull-right">#}
+{#                <a href="http://127.0.0.1:8000/127.0.0.1/user_info/">[ 个人中心-</a>#}
+{#                <a href="http://127.0.0.1:8000/127.0.0.1/logout/">退出 ]</a>#}
+{#            </p>#}
+             <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li id="touxiang"><a href="/{{ request.user.username }}"></a></li>
+                    <li><a href="/{{ request.user.username }}">{{ request.user.username }}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">修改密码</a></li>
+                            <li><a href="#">修改头像</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout/">注销</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="container-fluid" id="bbs">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div>
+                <div class="navbar-header">
+                    <div><a href="https://www.cnblogs.com"><img src="/static/img/admin_logo.gif" alt=""></a></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">
+                            操作
+                        </a>
+                        <a href="/add_article/" class="list-group-item">添加文章</a>
+                        <a href="#" class="list-group-item">添加新随笔</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">
+                            分类
+                        </a>
+                        <a href="#" class="list-group-item">1</a>
+                        <a href="#" class="list-group-item">2</a>
+                        <a href="#" class="list-group-item">3</a>
+                        <a href="#" class="list-group-item">4</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="http://127.0.0.1:8000/m/">文章</a></li>
+                        <li role="presentation"><a href="#">随笔</a></li>
+                        <li role="presentation"><a href="#">评论</a></li>
+                        <li role="presentation"><a href="#">点赞</a></li>
+                        <li role="presentation"><a href="#">相册</a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        {% block home %}
+                        {% endblock %}
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">随笔页面</div>
+                    <div role="tabpanel" class="tab-pane" id="messages">日志页面</div>
+                    <div role="tabpanel" class="tab-pane" id="settings">链接页面</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

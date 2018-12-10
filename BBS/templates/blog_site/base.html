@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ blog.userinfo.username }}-的个人博客</title>
+    {% block mytitle %}
+    {% endblock %}
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/{{ blog.theme }}">
+    <link rel="stylesheet" href="/static/css/blog.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    {% block blog %}
+
+    {% endblock %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #bbs2 {
+            border: #9d9d9d 1px solid;
+            border-radius: 10px;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        #touxiang {
+            display: block;
+            width: 37px;
+            height: 37px;
+            border-radius: 50%;
+            background: url("/media/{{ request.user.avatar }}") no-repeat;
+            background-size: 37px;
+            margin-right: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid" id="bbs2">
+        <div class="pull-left">{{ blog.title }}</div>
+        <div class="pull-right " id="pull-right">
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li id="touxiang"><a href="/{{ request.user.username }}"></a></li>
+                    <li><a href="/{{ request.user.username }}">{{ request.user.username }}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">修改密码</a></li>
+                            <li><a href="#">修改头像</a></li>
+                            <li><a href="http://127.0.0.1:8000/m/">后台管理</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout/">注销</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="/login/">登录</a></li>
+                    <li><a href="/register/">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            {% load my_tag %}
+            {% classify username %}
+        </div>
+        <div class="col-md-9">
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

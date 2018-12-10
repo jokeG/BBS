@@ -1,0 +1,32 @@
+{% extends 'background_management/base.html' %}
+
+{% block home %}
+
+ <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>文章标题</th>
+            <th>发布时间</th>
+            <th>评论数</th>
+            <th>点赞数</th>
+            <th>修改</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in article_list %}
+            <tr>
+                <td><a href="/{{ request.user.username }}/article/{{ article.pk }}">{{ article.title }}</a></td>
+                <td>{{ article.create_time|date:'Y-m-d H:i:s' }}</td>
+                <td>{{ article.commit_num }}</td>
+                <td>{{ article.up_num }}</td>
+                <td><a href="/update_article/{{ article.pk }}">修改</a></td>
+                <td><a href="/delete_article/?id={{ article.pk }}">删除</a></td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+{% endblock %}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    <title>用户注册</title>
+    <style>
+        #my_file{
+            {#display: none;#}
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h1>用户注册</h1>
+            <form id="form">
+                {% csrf_token %}
+
+                {% for foo in my_form %}
+                    <div class="form-group">
+                        <label for="{{ foo.auto_id }}">{{ foo.label }}</label>
+                        {{ foo }} <span class="error pull-right" style="color: red">{{ foo.errors.0 }}</span>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <label for="my_file">头像上传
+                        <img src="/media/avatar/default.jpg" id="img_file" alt="" width="80" height="80"
+                             style="margin-left: 10px">
+                    </label>
+
+                    <input accept="avatar/*" type="file" id="my_file">
+                </div>
+
+
+                <input type="button" value="注册" class="btn btn-primary " id="btn"><span class="error"></span>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+<script>
+    //控件值发生变化的事件
+    $("#my_file").change(function () {
+        //先取出文件(图片)
+        var file_obj = $("#my_file")[0].files[0];
+        //通过文件阅读器,把图片放到img标签上
+        //生成一个文件阅读器对象
+        var filereader = new FileReader()
+        //把图片对象,读到filereader对象中
+        filereader.readAsDataURL(file_obj)
+        //等加载完成,在操作
+        filereader.onload=function () {
+            $("#img_file").attr('src', filereader.result)
+        }
+
+
+    })
+
+    $("#btn").click(function () {
+        //生成formdata对象
+        var formdata=new FormData()
+        formdata.append('username',$("#id_username").val())
+        formdata.append('password',$("#id_password").val())
+        formdata.append('re_password',$("#id_re_password").val())
+        formdata.append('email',$("#id_email").val())
+        formdata.append('csrfmiddlewaretoken',$('[name="csrfmiddlewaretoken"]').val())
+       //把文件放到formdata中
+        formdata.append('my_file',$('#my_file')[0].files[0])
+        $.ajax({
+            url:'/register/',
+            type:'post',
+            processData:false,
+            contentType:false,
+            data:formdata,
+            success:function (data) {
+                if(data.status==100){
+                    location.href=data.url
+                }else{
+                    //在之前清除
+                    $(".form-group").removeClass('has-error')
+                     $(".error").html("")
+                    $.each(data.msg,function (key,value) {
+                        console.log(key,value)
+                        if(key=='__all__'){
+                            $("#id_re_password").next().html(value[0])
+                        }
+                        $("#id_"+key).next().html(value[0]).parent().addClass('has-error')
+
+                    })
+
+                }
+
+            }
+        })
+
+    })
+//注册用户校验,ok
+    $("#id_username").blur(function () {
+        $.ajax({
+            url:'/check_username/',
+            type:'post',
+            data:{name:$(this).val(),'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            success:function (data) {
+                console.log(data)
+                if(data.status==101){
+                    $('#id_username').next().html(data.msg).parent().addClass('has-error')
+                }
+            }
+
+        })
+    })
+
+
+</script>
+</html>

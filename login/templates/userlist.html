@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="../static/jquery-3.3.1.js"></script>
+    <script src="../static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</head>
+<body>
+<div class="col-md-6 col-md-offset-3" >
+    <h3>用户信息列表</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>密码</th>
+            <th>性别</th>
+            <th>电话</th>
+            <th>删除</th>
+            <th>编辑</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in user_list %}
+            <tr>
+                <td>{{ user.nid }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.pwd }}</td>
+                <td>{{ user.sex }}</td>
+                <td>{{ user.phone }}</td>
+                <td><a href="/deleteuser?id={{ user.nid }}">删除</a></td>
+                <td><a href="/editeuser?id={{ user.nid }}">编辑</a></td>
+            </tr>
+        {% endfor %}
+        <a href="/adduser/" class="pull-right">新增用户</a>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

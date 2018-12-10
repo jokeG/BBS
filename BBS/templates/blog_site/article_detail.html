@@ -1,0 +1,157 @@
+{% extends 'blog_site/base.html' %}
+
+
+
+
+{% block content %}
+
+    <div>
+        <p><h4 class="text-center">{{ article.title }}</h4></p>
+        <div>
+            {{ article.content|safe }}
+        </div>
+
+        <div class="clearfix">
+            <div id="div_digg">
+                <div class="diggit action">
+                    <span class="diggnum" id="digg_count">{{ article.up_num }}</span>
+                </div>
+                <div class="buryit action">
+                    <span class="burynum" id="bury_count">{{ article.down_num }}</span>
+                </div>
+                <div class="clear"></div>
+                <div class="diggword" id="digg_tips" style="color: red;"></div>
+            </div>
+        </div>
+
+        <div>
+            <ul class="list-group cotent_ul">
+                {% for content in content_list %}
+                    <li class="list-group-item">
+                        <p><span>#{{ forloop.counter }}楼</span>
+                            <span>{{ content.create_time|date:'Y-m-d H:i:s' }}</span>
+                            <span><a href="/{{ content.user.username }}">{{ content.user.username }}</a></span>
+                            <span class="pull-right replay" username="{{ content.user.username }}"
+                                  content_id="{{ content.pk }}">回复</span>
+                        </p>
+                        {% if content.parent %}
+                            <p class="well">@{{ content.parent.user.username }}</p>
+
+                        {% endif %}
+                        {{ content.content }}
+                    </li>
+                {% endfor %}
+
+
+            </ul>
+        </div>
+        <div>
+            <p>发表评论</p>
+            <p>
+                昵称：<input type="text" id="tbCommentAuthor" class="author" disabled="disabled" size="50" value="{{ request.user.username }}">
+            </p>
+            <p>评论内容：</p>
+            <p>
+                <textarea name="" id="content" cols="60" rows="10">
+
+
+            </textarea>
+            </p>
+            <button class="btn btn-primary submit">提交</button>
+
+
+        </div>
+    </div>
+
+    <script>
+        var pid = '';
+        $('.submit').click(function () {
+            var content = $("#content").val()
+            $("#content").val("")
+
+            if (pid) {
+                var index = content.indexOf('\n') + 1
+                content = content.slice(index)
+            }
+
+            $.ajax({
+                url: '/commit_content/',
+                type: 'post',
+                data: {
+                    'article_id': '{{ article.pk }}',
+                    'content': content,
+                    'pid': pid,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    var time = data.time;
+                    var content = data.content;
+                    var user_name = data.user_name;
+                    var ss = '';
+                    if (pid) {
+
+                        pid = '';
+                        var parent_name = data.parent_namel;
+                        ss = `
+                         <li class="list-group-item">
+                         <p>
+                         <span>${ user_name }</span>
+                            <span>${ time }</span>
+                        </p>
+                            <p class="well">@${parent_name }</p>
+                        ${content}
+                    </li>
+                        `
+                    } else {
+                        ss = `
+                      <li class="list-group-item">
+                        <p>
+                            <span>${ user_name }</span>:
+                            <span>${ time }</span>
+                        </p>
+                         ${content}
+                    </li>
+                    `
+                    }
+
+                    $(".cotent_ul").append(ss)
+
+                }
+            })
+        })
+        $(".replay").click(function () {
+            var username = $(this).attr('username');
+            $('#content').val('@' + username + '\n');
+            $('#content').focus();
+            pid = $(this).attr('content_id')
+
+
+        })
+        $(".action").click(function () {
+            var is_up = $(this).hasClass('diggit')
+
+            var obj = $(this).children('span')
+
+            $.ajax({
+                url: '/diggit/',
+                type: 'post',
+                data: {article_id: '{{ article.pk }}', is_up: is_up, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function (data) {
+                    $("#digg_tips").html(data.msg)
+                    if (data.status == 100) {
+                        obj.text(Number(obj.text()) + 1)
+
+                    }
+
+                    setTimeout(function () {
+                        $("#digg_tips").html("")
+                    }, 3000)
+
+                }
+            })
+
+        });
+
+    </script>
+
+{% endblock %}
